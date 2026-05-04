@@ -172,14 +172,29 @@ if db is not None:
             try:
                 llm = OllamaLLM(
                     model="gpt-oss:20b",
-                    temperature=0.1
+                    temperature=0.1,
+                    num_predict=256,
+                    num_ctx=4096,
+                    keep_alive="10m"
                 )
 
                 prompt = PromptTemplate.from_template(
                     """
-                    주어진 문맥을 바탕으로 질문에 답하세요.
-                    문맥: {context}
-                    질문: {question}
+                    당신은 제조 현장 문서 기반 RAG 질의응답 assistant입니다.
+                    반드시 아래 문맥에 근거해서만 답변하세요.
+                    
+                    규칙:
+                    1. 문맥에 없는 내용은 추측하지 말고 "제공된 문서에서 확인할 수 없습니다."라고 답하세요.
+                    2. 답변에는 핵심 근거를 간단히 포함하세요.
+                    3. 여러 문서 내용이 충돌하면 충돌한다고 명시하세요.
+                    4. 답변은 제조 현장 작업자가 이해하기 쉽게 간결하게 작성하세요.
+                    
+                    문맥:
+                    {context}
+                    
+                    질문:
+                    {question}
+                    
                     답변:
                     """
                 )
