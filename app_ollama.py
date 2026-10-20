@@ -20,8 +20,9 @@ from langchain_ollama import OllamaLLM
 from langchain_classic.chains import RetrievalQA
 from langchain_core.prompts import PromptTemplate
 
-# (중요) Windows 환경 Tesseract 설치 경로 지정 (설치 환경에 맞게 수정하세요)
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# Tesseract 실행 파일 경로: 환경변수 TESSERACT_CMD가 있으면 사용하고, 없으면 PATH에 등록된 tesseract를 사용
+if os.environ.get("TESSERACT_CMD"):
+    pytesseract.pytesseract.tesseract_cmd = os.environ["TESSERACT_CMD"]
 
 # 웹 서비스 UI 구성
 st.title("LangChain 기반 생성형 AI RAG 시스템 (Ollama 다중 파일 버전)")
